@@ -52,13 +52,13 @@ static mensagem + #20, #'\0'
 mensagem2 : string "Ola Mundo!"
 
 TEST1:	VAR		#3
-STATIC 	TEST1 + #0, #132
-STATIC 	TEST1 + #1, #133
+STATIC 	TEST1 + #0, #136
+STATIC 	TEST1 + #1, #137
 STATIC 	TEST1 + #2, #'\0'
 
 TEST2:	VAR		#3
-STATIC 	TEST2 + #0, #134
-STATIC 	TEST2 + #1, #135
+STATIC 	TEST2 + #0, #138
+STATIC 	TEST2 + #1, #139
 STATIC 	TEST2 + #2, #'\0'
 
 ;---- Inicio do Programa Principal -----
