@@ -37,9 +37,15 @@
 ; ************************************************ ;
 ;				IMAGENS DOS OBJETOS
 ; ************************************************ ;
-BIRD_2:		VAR #1
+BIRD_2:		VAR #4
 STATIC 			BIRD_2 + #0, #128
+STATIC			BIRD_2 + #1, #129
+STATIC			BIRD_2 + #2, #130
+STATIC			BIRD_2 + #3, #131
 
+CANO_BASE:	VAR #2
+STATIC			CANO_BASE + #0, #132
+STATIC			CANO_BASE + #1, #133		
 
 
 ; ************************************************ ;
@@ -65,11 +71,30 @@ MAIN:
 						; Obs: a mensagem sera' impressa ate' encontrar "/0"
 						
 	
-	LOADN R0, #50
+		LOADN R0, #40
 	LOADN R1, #BIRD_2
 	LOADN R2, #256
-	LOADN R3, #2
-	CALL PRINT_NxN
+	CALL PRINT_2x2
+	
+	LOADN R0, #60
+	LOADN R1, #132
+	LOADN R2, #512
+	ADD	R1, R1, R2	
+	OUTCHAR	R1, R0
+	
+	LOADN R0, #61
+	LOADN R1, #133
+	LOADN R2, #512
+	ADD	R1, R1, R2	
+	OUTCHAR	R1, R0
+	
+	
+	LOADN R0, #62
+	LOADN R1, #134
+	LOADN R2, #512
+	ADD	R1, R1, R2	
+	OUTCHAR	R1, R0
+	
 
 	
 	HALT
@@ -78,38 +103,47 @@ MAIN:
 
 PRINT_2x2:
 
+	PUSH 	R0				; Posição.
 	PUSH	R1				; Primeiro bloco da imagem.
 	PUSH	R2				; Cor do objeto.
 	PUSH	R3				; Numero de blocos.
-	PUSH 	R4				; Quebra de linha.
+	PUSH 	R4				; Caracter.
 	PUSH	R5				; 0
+	PUSH 	R6				; 2
+	PUSH 	R7				; Quebra de linha
 	
 	LOADN	R3, #4
-	LOADN	R4, #40
+	LOADN	R7, #38
 	LOADN	R5, #0
-	
+	LOADN	R6, #2
 
-LOOP_PRINT_N:
+LOOP_PRINT_2:
 
 	CMP		R3, R5
-	JEQ		END_PRINT_N		; Verifica se 4 blocos ja foram printados.
+	JEQ		END_PRINT_2		; Verifica se 4 blocos ja foram printados.
 	LOADI	R4, R1
 	ADD		R4, R4, R2
 	OUTCHAR R4, R0
+
 	INC		R1
-	DEC		R5
-	JMP		LOOP_PRINT_N
+	INC 	R0
+	DEC		R3
+	
+	CMP		R3, R6
+	JNE		LOOP_PRINT_2
+	ADD		R0, R0, R7
+	JMP		LOOP_PRINT_2
 
-END_PRINT_N:
+END_PRINT_2:
 
-	POP		R0
-	POP		R7
+	POP 	R7
 	POP		R6
 	POP		R5
 	POP		R4
 	POP		R3
 	POP		R2
 	POP		R1
+	POP		R0
 	RTS
 	
 ;---- Inicio das Subrotinas -----
