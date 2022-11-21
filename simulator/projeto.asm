@@ -37,8 +37,8 @@
 ; ************************************************ ;
 ;				IMAGENS DOS OBJETOS
 ; ************************************************ ;
-SKULL_16:		VAR #1
-STATIC 			SKULL_16 + #0, #136
+BIRD_2:		VAR #1
+STATIC 			BIRD_2 + #0, #128
 
 
 
@@ -55,7 +55,7 @@ mensagem2 : string "Ola Mundo!"
 
 MAIN:
 
-	loadn r0, #0			; Posicao na tela onde a mensagem sera' escrita
+	LOADN r0, #0			; Posicao na tela onde a mensagem sera' escrita
 	loadn r1, #mensagem2	; Carrega r1 com o endereco do vetor que contem a mensagem
 	loadn r2, #256			; Seleciona a COR da Mensagem
 	
@@ -63,46 +63,42 @@ MAIN:
 						; r1 = endereco onde comeca a mensagem
 						; r2 = cor da mensagem.   
 						; Obs: a mensagem sera' impressa ate' encontrar "/0"
+						
+	
+	LOADN R0, #50
+	LOADN R1, #BIRD_2
+	LOADN R2, #256
+	LOADN R3, #2
+	CALL PRINT_NxN
 
-	LOADN	R0, #80
-	LOADN	R1, #TEST1
-	LOADN	R2, #256
-	
-	CALL	Imprimestr
-	
-	LOADN	R0, #120
-	LOADN	R1, #TEST2
-	LOADN	R2, #256
-	
-	CALL	Imprimestr
 	
 	HALT
 
 ; *************FIM PROGRAMA PRINCIPAL************* ;
 
-PRINT_NxN:
+PRINT_2x2:
 
 	PUSH	R1				; Primeiro bloco da imagem.
 	PUSH	R2				; Cor do objeto.
-	PUSH	R3				; Valor do N.
-	PUSH	R4				; Recebe os blocos da imagem.
-	PUSH	R5				; Numero de blocos.
-	PUSH	R6				; 0
-	PUSH	R7				; Quebra de linha.
-	PUSH	R0				; Posicao do objeto.
+	PUSH	R3				; Numero de blocos.
+	PUSH 	R4				; Quebra de linha.
+	PUSH	R5				; 0
 	
-	MULT	R5, R3, R3		; Calcula o numero de blocos.
-	LOADN	R6, #0
-	LOADN	R7, #40
+	LOADN	R3, #4
+	LOADN	R4, #40
+	LOADN	R5, #0
+	
 
 LOOP_PRINT_N:
 
-	CMP		R5, R6
-	JEQ		END_PRINT_N		; Verifica se N blocos ja foram printados.
+	CMP		R3, R5
+	JEQ		END_PRINT_N		; Verifica se 4 blocos ja foram printados.
 	LOADI	R4, R1
 	ADD		R4, R4, R2
 	OUTCHAR R4, R0
 	INC		R1
+	DEC		R5
+	JMP		LOOP_PRINT_N
 
 END_PRINT_N:
 

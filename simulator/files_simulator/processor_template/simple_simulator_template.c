@@ -11,8 +11,25 @@ Do todos os comandos...
 6) E o PC ????????
 */
 
+/*
+
+
+							 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
+65533: (Timer Control):		|ST|  |  |  |  |  |  |  |		Timer Value		|
+[ST]: Set Timer
+65534: (Timer Routine):		|			Timer Routine Address				|
+65535: (Interruption Flag): |EI|ET|  |  |  |  |  |  |IF|TI|  |  |  |  |  |  |
+														(+)<---Priority---(-)
+[EI]: Enable Interruption
+[ET]: Enable Timer Interruption
+[IF]: Interruption Flag
+[TI]: Timer Interruption
+
+
+*/
+
 #define TAMANHO_PALAVRA 16
-#define TAMANHO_MEMORIA 32768
+#define TAMANHO_MEMORIA 65536
 #define MAX_VAL 65535
 
 // Estados do Processador
