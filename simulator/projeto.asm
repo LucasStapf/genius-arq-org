@@ -45,7 +45,12 @@ STATIC			BIRD_2 + #3, #131
 
 CANO_BASE:	VAR #2
 STATIC			CANO_BASE + #0, #132
-STATIC			CANO_BASE + #1, #133		
+STATIC			CANO_BASE + #1, #133	
+STATIC			CANO_BASE + #2, #134
+
+CANO_TUBO: VAR #2
+STATIC			CANO_TUBO + #0, #135
+STATIC			CANO_TUBO + #1, #136
 
 
 ; ************************************************ ;
@@ -71,7 +76,7 @@ MAIN:
 						; Obs: a mensagem sera' impressa ate' encontrar "/0"
 						
 	
-		LOADN R0, #40
+	LOADN R0, #40
 	LOADN R1, #BIRD_2
 	LOADN R2, #256
 	CALL PRINT_2x2
@@ -91,6 +96,18 @@ MAIN:
 	
 	LOADN R0, #62
 	LOADN R1, #134
+	LOADN R2, #512
+	ADD	R1, R1, R2	
+	OUTCHAR	R1, R0
+
+	LOADN R0, #63
+	LOADN R1, #135
+	LOADN R2, #512
+	ADD	R1, R1, R2	
+	OUTCHAR	R1, R0
+
+	LOADN R0, #64
+	LOADN R1, #136
 	LOADN R2, #512
 	ADD	R1, R1, R2	
 	OUTCHAR	R1, R0
