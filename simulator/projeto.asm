@@ -33,15 +33,20 @@
 	JMP MAIN
 
 
+; ************************************************ ;
+;				VARIÁVEIS GLOBAIS
+; ************************************************ ;
+POS_BIRD:		VAR #1
+OLD_POS_BIRD:	VAR #1
 
 ; ************************************************ ;
 ;				IMAGENS DOS OBJETOS
 ; ************************************************ ;
-BIRD_2:		VAR #4
-STATIC 			BIRD_2 + #0, #128
-STATIC			BIRD_2 + #1, #129
-STATIC			BIRD_2 + #2, #130
-STATIC			BIRD_2 + #3, #131
+BIRD:		VAR #4
+STATIC 			BIRD + #0, #128
+STATIC			BIRD + #1, #129
+STATIC			BIRD + #2, #130
+STATIC			BIRD + #3, #131
 
 CANO_BASE:	VAR #2
 STATIC			CANO_BASE + #0, #132
@@ -66,58 +71,22 @@ mensagem2 : string "Ola Mundo!"
 
 MAIN:
 
-	LOADN r0, #0			; Posicao na tela onde a mensagem sera' escrita
-	loadn r1, #mensagem2	; Carrega r1 com o endereco do vetor que contem a mensagem
-	loadn r2, #256			; Seleciona a COR da Mensagem
-	
-	call Imprimestr   	; r0 = Posicao da tela que o primeiro caractere da mensagem sera' impresso
-						; r1 = endereco onde comeca a mensagem
-						; r2 = cor da mensagem.   
-						; Obs: a mensagem sera' impressa ate' encontrar "/0"
-						
-	
-	LOADN R0, #40
-	LOADN R1, #BIRD_2
-	LOADN R2, #256
-	CALL PRINT_2x2
-	
-	LOADN R0, #60
-	LOADN R1, #132
-	LOADN R2, #512
-	ADD	R1, R1, R2	
-	OUTCHAR	R1, R0
-	
-	LOADN R0, #61
-	LOADN R1, #133
-	LOADN R2, #512
-	ADD	R1, R1, R2	
-	OUTCHAR	R1, R0
-	
-	
-	LOADN R0, #62
-	LOADN R1, #134
-	LOADN R2, #512
-	ADD	R1, R1, R2	
-	OUTCHAR	R1, R0
-
-	LOADN R0, #63
-	LOADN R1, #135
-	LOADN R2, #512
-	ADD	R1, R1, R2	
-	OUTCHAR	R1, R0
-
-	LOADN R0, #64
-	LOADN R1, #136
-	LOADN R2, #512
-	ADD	R1, R1, R2	
-	OUTCHAR	R1, R0
-	
-
+	LOADN	R0, #0
+	STORE	OLD_POS_BIRD, R0
+	STORE	POS_BIRD, R0
 	
 	HALT
 
 ; *************FIM PROGRAMA PRINCIPAL************* ;
 
+
+
+
+; *************PRINT_2x2************* ;
+; Imprime uma imagem 2x2 (2 caractes por 2 caracteres)
+; R0: Posição inicial
+; R1: Primeiro caracter da imagem
+; R2: Cor da imagem
 PRINT_2x2:
 
 	PUSH 	R0				; Posição.
@@ -161,8 +130,34 @@ END_PRINT_2:
 	POP		R2
 	POP		R1
 	POP		R0
+
 	RTS
 	
+; ************* BIRD_CONTROLLER ************* ;
+BIRD_CONTROLLER:
+	PUSH	R4
+	PUSH 	R5
+	INCHAR 	R4
+	LOADN	R5, #'W'
+	CMP 	R5, R4
+	CEQ		BIRD_FLY
+	POP		R5
+	POP		R4
+	RTS
+
+; ************ BIRD_FLY *********** ;
+BIRD_FLY:
+	PUSH	R0
+	PUSH	R1
+	PUSH	R2
+	LOAD	R0, POS_BIRD
+	STORE	OLD_POS_BIRD, R0
+	; TERMINAR
+	POP		R2
+	POP		R1
+	POP		R0
+	RTS
+
 ;---- Inicio das Subrotinas -----
 	
 Imprimestr:		;  Rotina de Impresao de Mensagens:    
