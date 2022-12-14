@@ -11,6 +11,7 @@
 //#include <curses.h>	// para a captura de caracteres do inchar
 #include <math.h>		// para a funcao pow
 #include <pthread.h>
+#include <chrono>
 
 using namespace std;
 
@@ -55,6 +56,9 @@ class Model : public ModelInterface
 		// -- Video ---
 		pixblock *block;
 
+        // -- Times --
+        bool countingTime;
+        uint64_t time;
 
 	public:
 		Model(char *cpuram, char *charmap);

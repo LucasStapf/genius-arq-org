@@ -1,0 +1,4 @@
+/snap/clion/218/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/snap/clion/218/bin/ninja/linux/ninja -G Ninja -S /home/lucas/workspace/projeto-orgarq/simulator/files_simulator -B /home/lucas/workspace/projeto-orgarq/simulator/files_simulator/cmake-build-debug
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/lucas/workspace/projeto-orgarq/simulator/files_simulator/cmake-build-debug

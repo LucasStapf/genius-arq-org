@@ -1,17 +1,25 @@
 #include "Model.h"
 #include <iostream>
+#include <chrono>
 
-void* processaAutomatico(void *data)
-{	if(data == NULL)
+uint64_t timeSinceEpochMillisec() {
+    using namespace std::chrono;
+    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+}
+
+void* processaAutomatico(void *data) {
+
+    if(data == NULL)
 		return NULL;
 
 	Model *model = (Model*) data;
 
 	int contador = 0;
 
-	while( model->getProcessamento() ) // automatico
-	{	gdk_threads_enter();
-		model->processador();
+	while( model->getProcessamento() ) { // automatico
+
+        gdk_threads_enter();
+        model->processador();
 		gdk_threads_leave();
 
 		contador++;
@@ -22,6 +30,7 @@ void* processaAutomatico(void *data)
 		}
 //*/
 	}
+
 	gdk_threads_enter();
 	model->updateAll();
 	gdk_threads_leave();
@@ -79,9 +88,10 @@ void Model::setController(ControllerInterface *controller)
 void Model::reset()
 {	pc = 0;
 	ir = 0;
- 	sp = 0x7FFC;
+// 	sp = 0x7FFC;
+    sp = END_STACK_BEGIN;
 	auxpc = 0;
-	pc2 = 0;	
+	pc2 = 0;
 
 	int i, tmp;
 	int vetor[] = {0, 0, 0, 0, 0 , 0, 0, 0};
@@ -96,8 +106,8 @@ void Model::reset()
 
 	setPC(0);
 	setIR(0);
-	setSP(0x7FFC);
-
+//	setSP(0x7FFC);
+    setSP(END_STACK_BEGIN);
 	setRegistrador(vetor);
 
 	for(i = 16; i-- ; )
@@ -187,9 +197,12 @@ void Model::setProcessamento(bool automatico)
 bool Model::getProcessamento()
 {	return automatico; }
 
-void Model::processa()
-{ if(automatico)
-	{	//pthread_join(out, NULL);
+void Model::processa() {
+
+
+    if(automatico) {
+
+        //pthread_join(out, NULL);
 		//pthread_create(&out, NULL, processaAutomatico, this); // cria uma thread para o Processamento
 
 		GError *error = NULL;
@@ -472,13 +485,41 @@ void Model::setDelay(int valor)
 	varDelay = valor;
 }
 
-void Model::processador()
-{ unsigned int la;
+void Model::processador() {
+
+    unsigned int la;
 	unsigned int i;
 	unsigned int temp;
 	unsigned int opcode;
 
 	unsigned int letra;
+
+    // Verifica se há valor no timer. Se houver, inicia contagem.
+    if (mem[END_TIMER] != 0) {
+
+        static int contadorAux = 0;
+
+        if (contadorAux == 0) {
+            if (!countingTime) {
+                countingTime = true;
+                time = timeSinceEpochMillisec();
+            }
+
+            uint64_t current = timeSinceEpochMillisec();
+            uint64_t diff = current - time;
+
+            if (diff >= mem[END_TIMER]) {
+                FR[F_INT_TIMER] = true;
+                mem[END_TIMER] = 0;
+            } else {
+                mem[END_TIMER] -= diff;
+            }
+
+            time = timeSinceEpochMillisec();
+        }
+
+        contadorAux = contadorAux == 10 ? 0 : contadorAux + 1;
+    }
 
   // ----- Ciclo de Busca: --------
 	ir = mem[pc];
@@ -516,10 +557,10 @@ void Model::processador()
 				break;
 			}
 
-			printf("Registrador: %d\n", reg[rx]);
+//			printf("Registrador: %d\n", reg[rx]);
 			//letra = reg[rx] & 0x7f;
 			letra = reg[rx] & 0xff;
-			printf("Letra: %d\n", letra);
+//			printf("Letra: %d\n", letra);
 
 			if(letra > 0)
       	temp = letra;// + 32;
@@ -818,12 +859,22 @@ void Model::processador()
 				//printf("Rx: %d	Ry: %d	Rz: %d\nPC: %d	IR: %d	opcode: %d\n\n", rx, ry, rz, pc, ir, opcode);
 				break;
     }
+
+    // Verifica se há interrupções
+    if (FR[F_INT_TIMER]) {
+        FR[F_INT_TIMER] = false;
+        mem[sp] = pc;
+        sp--;
+        pc = mem[END_INT_TIMER];
+        countingTime = false;
+    }
+
 	auxpc = pc;
 
 	int ir2;
 
 	// ----- Ciclo de Busca: --------
-  ir2 = mem[pc];
+    ir2 = mem[pc];
 	pc2 = pc + 1;
 	// ----------- -- ---------------
 

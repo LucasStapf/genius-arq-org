@@ -163,7 +163,7 @@
 #define NOP             "000000"
 #define HALT            "001111"
 #define CLEARC          "001000"
-#define BREAKP		"001110"
+#define BREAKP		    "001110"
 
 /* Definicoes das condicoes (binarios em strings) */
 #define NO_COND         "0000"
@@ -374,10 +374,10 @@
   [32739 - 32745] : Folga
   [32746]         : Rx
   [32747]         : Tx
-  [32748]         : Timer
+  [32748]         : Timer           // Valor do timer
   [32749 - 32758] : Argumentos
-  [32759]	  : Retorno
-  [32760 - 32767] : Interrupcoes
+  [32759]	      : Retorno
+  [32760 - 32767] : Interrupcoes    // [32760]: Timer
 
 */
 

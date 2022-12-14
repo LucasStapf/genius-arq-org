@@ -2,7 +2,32 @@
 #define MNEUMONICOS_H
 
 #define TAMANHO_PALAVRA 16
+
+/*
+[00000 - 16384] : Programa e variaveis (16kw 32kb)
+[16385 - 24576] : Dados estaticos (8kw 16kb)
+[24577 - 30681] : Dados dinamicos (6kw 12kb)
+[30682]         : System call
+[30683 - 30689] : Folga
+[30690 - 32738] : Stack (2kw 4kb)
+[32739 - 32745] : Folga
+[32746]         : Rx
+[32747]         : Tx
+[32748]         : Timer           // Valor do timer
+[32749 - 32758] : Argumentos
+[32759]	        : Retorno
+[32760 - 32767] : Interrupcoes    // [32760]: Timer
+*/
+
 #define TAMANHO_MEMORIA 32768
+
+/* --- Endereços na Memoria --- */
+#define END_STACK_BEGIN 32738
+#define END_TIMER       32748
+#define END_INT_TIMER   32760
+
+/* --- Flag Register --- */
+#define F_INT_TIMER     15
 
 #define LOAD 48
 #define STORE 49
