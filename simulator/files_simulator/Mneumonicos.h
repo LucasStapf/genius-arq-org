@@ -6,8 +6,9 @@
 /*
 [00000 - 16384] : Programa e variaveis (16kw 32kb)
 [16385 - 24576] : Dados estaticos (8kw 16kb)
-[24577 - 30681] : Dados dinamicos (6kw 12kb)
-[30682]         : System call
+[24577 - 30680] : Dados dinamicos (6kw 12kb)
+[30681]         : System call
+[30682]         : Flags e chaves de Interrupções
 [30683 - 30689] : Folga
 [30690 - 32738] : Stack (2kw 4kb)
 [32739 - 32745] : Folga
@@ -22,6 +23,25 @@
 #define TAMANHO_MEMORIA 32768
 
 /* --- Endereços na Memoria --- */
+
+#define END_SYSTEM_CALL 30681
+
+/**
+ * Endereço onde serão registradas as interrupões no sistema e se serão permitidas ou não.
+ * Os 8 bits menos significativos representam as chaves das interrupções, ou seja, o processador só ira aceitar
+ * as interrupções permitidas.
+ * Os 8 bits mais significativos representam as flags de interrupção, ou seja,
+ * quando ocorrer uma interrupção do tipo X, a flag X irá subir (ir para nível 1).
+ * Bits:
+ * 15: INT_TIMER (Interrupção do timer)
+ * ...
+ * 7: ENB_TIMER (Ativar timer)
+ * ...
+ */
+#define END_INT_CONTROL 30681
+#define INT_TIMER       15
+#define ENB_TIMER       7
+
 #define END_STACK_BEGIN 32738
 #define END_TIMER       32748
 #define END_INT_TIMER   32760

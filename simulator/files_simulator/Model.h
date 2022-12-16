@@ -115,6 +115,9 @@ class Model : public ModelInterface
 
 		int pega_pedaco(int ir, int a, int b);
 
+        void setBit(int address, int bit);
+        void clearBit(int address, int bit);
+
 
 		// ------ Video -------------------
 		void registraVideo(Video *v);

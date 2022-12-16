@@ -952,3 +952,19 @@ void Model::processador() {
   }
 }
 
+void Model::setBit(int address, int bit) {
+
+    if (address < 0 || address > TAMANHO_MEMORIA || bit < 0 || bit > 15)
+        return;
+
+    mem[address] |= (1 << bit);
+}
+
+void Model::clearBit(int address, int bit) {
+
+    if (address < 0 || address > TAMANHO_MEMORIA || bit < 0 || bit > 15)
+        return;
+
+    mem[address] &= ~(1 << bit);
+}
+
