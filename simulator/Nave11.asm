@@ -125,10 +125,10 @@ int_timer:
 main:
 	
 	loadn	r0, #128				 
-	store	30682, r0				; Habilita interrupção do timer.
+;	store	30682, r0				; Habilita interrupção do timer.
 	loadn	r0, #int_timer
 	store	32760, r0				; Salva a sub-rotina que irá tratar a interrupção por timer.
-	loadn 	r0, #10000				
+	loadn 	r0, #10			
 	store 	32748, r0				; Valor do timer (em ms).
 	
 	call ApagaTela

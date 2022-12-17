@@ -4,7 +4,7 @@
 
 uint64_t timeSinceEpochMillisec() {
     using namespace std::chrono;
-    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+    return duration_cast<seconds>(system_clock::now().time_since_epoch()).count();
 }
 
 void* processaAutomatico(void *data) {
@@ -865,6 +865,7 @@ void Model::processador() {
     if (mem[END_SYSTEM_CALL] != 0) {
         mem[END_SYSTEM_CALL] = 0;
 
+        // Verifica qual interrupção ocorreu. Ordem de prioridade: Bit 15 -> 8
         if (getBit(mem[END_INTERRUPTIONS], INT_TIMER)
             && getBit(mem[END_INTERRUPTIONS], ENB_TIMER)) { // Seguindo ordem de prioriodade 15 -> 8
 
