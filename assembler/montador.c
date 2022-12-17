@@ -201,10 +201,14 @@ void DetectarLabels(void)
             case LOAD_CODE :
             case STORE_CODE :
             case LOADIMED_CODE :
-            case STOREIMED_CODE :
+                parser_SkipUntil(',');
+                parser_SkipUntilEnd();
+                end_cnt+=2;
+                break;
+                case STOREIMED_CODE :
                 parser_SkipUntil(','); 
                 parser_SkipUntilEnd(); 
-                end_cnt+=2; 
+                end_cnt+=3;
                 break;
             case LOADINDEX_CODE :
             case STOREINDEX_CODE :
@@ -510,22 +514,55 @@ void MontarInstrucoes(void)
                 */
                 
                 case STOREIMED_CODE :
-                    str_tmp1 = parser_GetItem_s();
-                    val1 = BuscaRegistrador(str_tmp1);
-                    free(str_tmp1);
+                    val1 = RecebeEndereco();
                     parser_Match(',');
                     val2 = RecebeNumero();
-                    str_tmp1 = ConverteRegistrador(val1);
+                    str_tmp1 = NumPBinString(val1);
                     str_tmp2 = NumPBinString(val2);
-                    sprintf(str_msg,"%s%s0000000",STOREIMED,str_tmp1);
+                    sprintf(str_msg,"%s0000000000",STOREIMED);
                     parser_Write_Inst(str_msg,end_cnt);
                     end_cnt += 1;
+                    sprintf(str_msg,"%s",str_tmp1);
+                    parser_Write_Inst(str_msg,end_cnt);
+                    end_cnt +=1;
                     sprintf(str_msg,"%s",str_tmp2);
                     parser_Write_Inst(str_msg,end_cnt);
                     end_cnt +=1;
                     free(str_tmp1);
                     free(str_tmp2);
                     break;
+
+//                    val2 = RecebeEndereco();
+//                    parser_Match(',');
+//                    str_tmp1 = parser_GetItem_s();
+//                    val1 = BuscaRegistrador(str_tmp1);
+//                    free(str_tmp1);
+//                    str_tmp1 = ConverteRegistrador(val1);
+//                    str_tmp2 = NumPBinString(val2);
+//                    sprintf(str_msg,"%s%s0000000",STORE,str_tmp1);
+//                    parser_Write_Inst(str_msg,end_cnt);
+//                    end_cnt += 1;
+//                    sprintf(str_msg,"%s",str_tmp2);
+//                    parser_Write_Inst(str_msg,end_cnt);
+//                    end_cnt +=1;
+//                    free(str_tmp1);
+//                    free(str_tmp2);
+
+//                    str_tmp1 = parser_GetItem_s();
+//                    val1 = BuscaRegistrador(str_tmp1);
+//                    free(str_tmp1);
+//                    parser_Match(',');
+//                    val2 = RecebeNumero();
+//                    str_tmp1 = ConverteRegistrador(val1);
+//                    str_tmp2 = NumPBinString(val2);
+//                    sprintf(str_msg,"%s%s0000000",STOREIMED,str_tmp1);
+//                    parser_Write_Inst(str_msg,end_cnt);
+//                    end_cnt += 1;
+//                    sprintf(str_msg,"%s",str_tmp2);
+//                    parser_Write_Inst(str_msg,end_cnt);
+//                    end_cnt +=1;
+//                    free(str_tmp1);
+//                    free(str_tmp2);
                     
                 /* ==============
                    OUTPUT Rx, Ry
