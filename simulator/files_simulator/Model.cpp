@@ -509,8 +509,9 @@ void Model::processador() {
             uint64_t diff = current - time;
 
             if (diff >= mem[END_TIMER]) {
-                FR[F_INT_TIMER] = true;
                 mem[END_TIMER] = 0;
+                mem[END_SYSTEM_CALL] = 1;
+                setBit(END_INTERRUPTIONS, INT_TIMER);
             } else {
                 mem[END_TIMER] -= diff;
             }
@@ -860,14 +861,28 @@ void Model::processador() {
 				break;
     }
 
-    // Verifica se há interrupções
-    if (FR[F_INT_TIMER]) {
-        FR[F_INT_TIMER] = false;
-        mem[sp] = pc;
-        sp--;
-        pc = mem[END_INT_TIMER];
-        countingTime = false;
+    // Verificar se há interrupções no sistema.
+    if (mem[END_SYSTEM_CALL] != 0) {
+        mem[END_SYSTEM_CALL] = 0;
+
+        if (getBit(mem[END_INTERRUPTIONS], INT_TIMER)
+            && getBit(mem[END_INTERRUPTIONS], ENB_TIMER)) { // Seguindo ordem de prioriodade 15 -> 8
+
+            mem[sp] = pc;
+            sp--;
+            pc = mem[END_INT_TIMER];
+            countingTime = false;
+        }
     }
+
+    // Verifica se há interrupções
+//    if (FR[F_INT_TIMER]) {
+//        FR[F_INT_TIMER] = false;
+//        mem[sp] = pc;
+//        sp--;
+//        pc = mem[END_INT_TIMER];
+//        countingTime = false;
+//    }
 
 	auxpc = pc;
 
@@ -966,5 +981,13 @@ void Model::clearBit(int address, int bit) {
         return;
 
     mem[address] &= ~(1 << bit);
+}
+
+bool Model::getBit(int address, int bit) {
+
+    if (address < 0 || address > TAMANHO_MEMORIA || bit < 0 || bit > 15)
+        return -1;
+
+    return (mem[address] & (1 << bit)) != 0 ? true : false;
 }
 

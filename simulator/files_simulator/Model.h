@@ -117,6 +117,7 @@ class Model : public ModelInterface
 
         void setBit(int address, int bit);
         void clearBit(int address, int bit);
+        bool getBit(int address, int bit);
 
 
 		// ------ Video -------------------
