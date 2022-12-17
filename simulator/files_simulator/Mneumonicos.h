@@ -46,41 +46,41 @@
 #define END_TIMER           32748
 #define END_INT_TIMER       32760
 
-/* --- Flag Register --- */
-#define F_INT_TIMER     15
+/* --------------------------- */
 
-#define LOAD 48
-#define STORE 49
-#define LOADIMED 56
-#define LOADINDEX 60
-#define STOREINDEX 61
-#define MOV	51
-#define OUTCHAR	50
-#define INCHAR 53
-#define ADD 32
-#define SUB 33
-#define MULT 34
-#define DIV	35
-#define INC	36
-#define LMOD 37
-#define LAND 18
-#define LOR 19
-#define LXOR 20
-#define LNOT 21
-#define SHIFT 16
-#define CMP 22
-#define JMP 2
-#define CALL 3
-#define RTS	4
-#define PUSH 5
-#define POP	6
-#define NOP	0
-#define HALT 15
-#define SETC 8
-#define BREAKP 14
+#define LOAD        48
+#define STORE       49
+#define LOADIMED    56
+#define LOADINDEX   60
+#define STOREINDEX  61
+#define STOREIMED   57
+#define MOV	        51
+#define OUTCHAR	    50
+#define INCHAR      53
+#define ADD         32
+#define SUB         33
+#define MULT        34
+#define DIV	        35
+#define INC	        36
+#define LMOD        37
+#define LAND        18
+#define LOR         19
+#define LXOR        20
+#define LNOT        21
+#define SHIFT       16
+#define CMP         22
+#define JMP         2
+#define CALL        3
+#define RTS	        4
+#define PUSH        5
+#define POP	        6
+#define NOP	        0
+#define HALT        15
+#define SETC        8
+#define BREAKP      14
 
-#define TAM 5       // Numero de instrucoes de duas linhas
-
+#define TAM     5       // Numero de instrucoes de duas linhas
+#define TAM_3   1
 
 #define BLACK 15
 #define BROWN 1

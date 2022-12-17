@@ -596,6 +596,11 @@ void Model::processador() {
       mem[reg[rx]] = reg[ry];
       break;
 
+    case STOREIMED:
+      mem[mem[pc]] = mem[mem[pc + 1]];
+      pc += 2;
+      break;
+
     case LOAD:
       reg[rx] = mem[mem[pc]];
       pc++;
@@ -955,6 +960,10 @@ void Model::processador() {
 		case LOADIMED:
 			pc2++;
 			break;
+
+        case STOREIMED:
+            pc2 += 2;
+            break;
 
 		case BREAKP:
 			controller->notifyProcessamento();
