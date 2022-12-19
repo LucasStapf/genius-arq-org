@@ -597,7 +597,7 @@ void Model::processador() {
       break;
 
     case STOREIMED:
-      mem[mem[pc]] = mem[mem[pc + 1]];
+      mem[mem[pc]] = mem[pc + 1];
       pc += 2;
       break;
 
@@ -869,11 +869,9 @@ void Model::processador() {
     // Verificar se há interrupções no sistema.
     if (mem[END_SYSTEM_CALL] != 0) {
         mem[END_SYSTEM_CALL] = 0;
-
         // Verifica qual interrupção ocorreu. Ordem de prioridade: Bit 15 -> 8
         if (getBit(mem[END_INTERRUPTIONS], INT_TIMER)
             && getBit(mem[END_INTERRUPTIONS], ENB_TIMER)) { // Seguindo ordem de prioriodade 15 -> 8
-
             mem[sp] = pc;
             sp--;
             pc = mem[END_INT_TIMER];
