@@ -872,6 +872,7 @@ void Model::processador() {
         // Verifica qual interrupção ocorreu. Ordem de prioridade: Bit 15 -> 8
         if (getBit(mem[END_INTERRUPTIONS], INT_TIMER)
             && getBit(mem[END_INTERRUPTIONS], ENB_TIMER)) { // Seguindo ordem de prioriodade 15 -> 8
+			clearBit(END_INTERRUPTIONS, INT_TIMER);
             mem[sp] = pc;
             sp--;
             pc = mem[END_INT_TIMER];

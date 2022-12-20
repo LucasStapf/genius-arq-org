@@ -38,54 +38,85 @@
 ; ************************************************ ;
 msg_inicial : 	string 		"Ola Mundo!"
 msg_timer:		string		"Timer funcionando!"
-
+msg_timer_2:	string		"Timer2 funcionando!"
+text:			var			#5
+static			text + #0,	#'1'
+static			text + #1,	#'2'
+static			text + #2,	#'3'
+static			text + #3,	#'4'
+static			text + #4,	#'\0'
 
 ; ************************************************ ;
-;				  INTERRUPCAO DO TIMER
+;				  INTERRUPCAO DO TIMER 1
 ; ************************************************ ;
 INT_TIMER:
 	
-	PUSH	R0
-	PUSH	R1
-	PUSH	R2
+		PUSH	R0
+		PUSH	R1
+		PUSH	R2
+		
+		LOADN	R0, #100
+		LOADN	R1, #msg_timer
+		LOADN	R2, #1792
+		CALL	Imprimestr
+		
+		STOREN	32760, #INT_TIMER_2		; Endereço da interrupção do timer.
+		STOREN	32748, #10				; Valor do timer. (segundos)
+		
+		POP		R2
+		POP		R1
+		POP		R0
+		
+		RTS
 	
-	LOADN	R0, #100
-	LOADN	R1, #msg_timer
-	LOADN	R2, #1792
-	CALL	Imprimestr
+; ************************************************ ;
+;				  INTERRUPCAO DO TIMER 2
+; ************************************************ ;
+INT_TIMER_2:
 	
-	POP		R2
-	POP		R1
-	POP		R0
-	
-	RTS
+		PUSH	R0
+		PUSH	R1
+		PUSH	R2
+		
+		LOADN	R0, #300
+		LOADN	R1, #msg_timer_2
+		LOADN	R2, #1792
+		CALL	Imprimestr
+		
+		POP		R2
+		POP		R1
+		POP		R0
+		
+		RTS
 
 ; ************************************************ ;
 ;				  PROGRAMA PRINCIPAL
 ; ************************************************ ;
 
 MAIN:
-
-	STOREN	30682, #128				; Habilita a interrupção do timer.
-	STOREN	32760, #INT_TIMER		; Endereço da interrupção do timer.
-	STOREN	32748, #10				; Valor do timer. (segundos)
 	
-	LOADN	R0, #50
-	LOADN	R1, #msg_inicial
-	LOADN	R2, #2304
-	CALL	Imprimestr
+		STOREN	30682, #128				; Habilita a interrupção do timer.
+		STOREN	32760, #INT_TIMER		; Endereço da interrupção do timer.
+		STOREN	32748, #10				; Valor do timer. (segundos)
+		
+		LOADN	R0, #50
+		LOADN	R1, #msg_inicial
+		LOADN	R2, #2304
+		CALL	Imprimestr
 
-;	LOADN	R0, #128
-;	STORE	30682, R0
-;	LOADN	R0, #INT_TIMER
-;	STORE	32760, R0
-;	LOADN	R0, #10
-;	STORE	32748, R0
+		
+	;	LOADN	R0, #128
+	;	STORE	30682, R0
+	;	LOADN	R0, #INT_TIMER
+	;	STORE	32760, R0
+	;	LOADN	R0, #10
+	;	STORE	32748, R0
 		
 LOOP:
-	JMP	LOOP	
-	
-	HALT
+		JMP	LOOP
+		JMP	LOOP	
+		
+		HALT
 
 ; *************FIM PROGRAMA PRINCIPAL************* ;
 
