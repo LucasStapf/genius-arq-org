@@ -2004,7 +2004,7 @@ void MontarInstrucoes(void)
                 */
                 
                 case RTI_CODE :
-                    sprintf(str_msg,"%s0000000000",RTI);
+                    sprintf(str_msg,"%s0000000001",RTI);
                     parser_Write_Inst(str_msg,end_cnt);
                     end_cnt += 1;
                     break;

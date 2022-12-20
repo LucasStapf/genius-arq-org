@@ -30,7 +30,7 @@ int_timer:
 		call Imprime
 	loop_int:		
 		jmp loop_int
-		rts
+		rti
 
 main:
 

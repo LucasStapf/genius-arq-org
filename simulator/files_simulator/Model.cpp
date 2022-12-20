@@ -740,7 +740,8 @@ void Model::processador() {
       case RTS:
       	sp++;
         pc = mem[sp];
-        pc++;
+        if (pega_pedaco(ir, 0, 0) == 0) // RTS = 0, RTI = 1
+            pc++;
         break;
 
       case ADD:

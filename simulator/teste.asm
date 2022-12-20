@@ -67,7 +67,7 @@ INT_TIMER:
 		POP		R1
 		POP		R0
 		
-		RTS
+		RTI
 	
 ; ************************************************ ;
 ;				  INTERRUPCAO DO TIMER 2
@@ -87,7 +87,7 @@ INT_TIMER_2:
 		POP		R1
 		POP		R0
 		
-		RTS
+		RTI
 
 ; ************************************************ ;
 ;				  PROGRAMA PRINCIPAL
@@ -113,7 +113,6 @@ MAIN:
 	;	STORE	32748, R0
 		
 LOOP:
-		JMP	LOOP
 		JMP	LOOP	
 		
 		HALT

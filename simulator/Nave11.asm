@@ -115,7 +115,7 @@ int_timer:
 	pop r2
 	pop r1
 	pop r0
-	rts
+	rti
 	
 
 ; END_INT_CONTROL 30682
