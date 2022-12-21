@@ -323,7 +323,7 @@ main:
         jeq fim                         
         
         
-        loop2:                              ; Loop referente a sequencia de cores a ser impressa pelo computador
+        imprimeSequencia:                   ; Loop referente a sequencia de cores a ser impressa pelo computador
 
             cmp r1, r7                      ; Verifica se todas as cores da rodada foram impressas
             
@@ -331,17 +331,18 @@ main:
             call Delay
             call apagaCorAtual
 
-            jeq reset                       ; Se todas as cores forem impressas, direciona-se para a vez do usuario digitar (loop3)
+            jeq reset                       ; Se todas as cores forem impressas, direciona-se para a vez do usuario digitar (digitaSequencia)
             inc r1                          ; Passa para a proxima cor a ser impressa 
 
-            jmp loop2
+            jmp imprimeSequencia
 
 
         reset:                              ; Preparacao para vez do usuario digitar. Aponta r1 para o inicio da sequencia de cores
+                                      
             loadn r1, #colours_sequence
 
 
-        loop3:                              ; Loop referente a sequencia de cores a ser digitada pelo usuario
+        digitaSequencia:                    ; Loop referente a sequencia de cores a ser digitada pelo usuario
 
             call acendeLetraDigitada        ; Rotinas para acender e apagar a ultima cor digitada pelo usuario
             call Delay
@@ -350,21 +351,21 @@ main:
             loadn r5, #Letra                ; Compara se a letra digitada eh a mesma armazenada no endereco de r1
             loadi r0, r5
             loadi r2, r1
-            cmp r0, r2
+            
+            cmp r0, r2                      ; Verifica se o usuario acertou a cor. Se nao, jmp fim
             jne fim
 
-;       + - - - Usuario ja acertou a letra da rodada
-;       |
+;       + - -  A partir daqui, o usuario ja acertou a letra da rodada
 ;       |
 ;       V
 
-            cmp r1, r7    ; Verifica se eh a ultima letra da rodada
-            jeq loop4
+            cmp r1, r7                      ; Verifica se digitou todas as letras da rodada em andamento. Se sim, jmp proximaRodada
+            jeq proximaRodada
            
-            inc r1
-            jmp loop3          
+            inc r1                          ; Nesse posicao, ainda falta digitar todas as letras da rodada em andamento
+            jmp digitaSequencia          
         
-            loop4:
+            proximaRodada:                  ; Label para iniciar a proxima rodada
                 inc r7
                 jeq main_loop  
  
@@ -732,10 +733,10 @@ digLetra:	; Espera que uma tecla seja digitada e salva na variavel global "Letra
 
 	store Letra, r0			; Salva a tecla na variavel global "Letra"
 	
-   digLetra_Loop2:	
+   digLetra_imprimeSequencia:	
 		inchar r0			; Le o teclado, se nada for digitado = 255
 		cmp r0, r1			;compara r0 com 255
-		jne digLetra_Loop2	; Fica lendo ate' que digite uma tecla valida
+		jne digLetra_imprimeSequencia	; Fica lendo ate' que digite uma tecla valida
 	
 	pop r2
 	pop r1
