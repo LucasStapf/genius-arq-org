@@ -1,13 +1,13 @@
 jmp main 
 
 colours_sequence: var #50
-static colours_sequence +  #0, #'s'
-static colours_sequence +  #1, #'a'
-static colours_sequence +  #2, #'q'
-static colours_sequence +  #3, #'w'
-static colours_sequence +  #4, #'a'
-static colours_sequence +  #5, #'s'
-static colours_sequence +  #6, #'w'
+static colours_sequence +  #0, #'s' ; Azul
+static colours_sequence +  #1, #'a' ; Amarelo
+static colours_sequence +  #2, #'q' ; Verde
+static colours_sequence +  #3, #'w' ; Vermelho
+static colours_sequence +  #4, #'a' ; Amarelo
+static colours_sequence +  #5, #'s' ; Azul
+static colours_sequence +  #6, #'w' ; Vermelho
 static colours_sequence +  #7, #'s'
 static colours_sequence +  #8, #'q'
 static colours_sequence +  #9, #'a'
@@ -294,30 +294,55 @@ static tab_azul_linha5 + #9, #'\0'
 
 Letra: var #1
 
-; r0:
-; r1: sequecia de cores
+
+; r0: 
+; r1: sequecia de cores a ser percorrida a cada iteracao
 ; r2:
-; r4:
+; r3: delimitador das strings
+; r4: registrador auxiliar para comparacoes
 ; r5: letra do teclado
 ; r6:
 ; r7: atual rodada
 main:
-    loadn r1, #colours_sequence
-    
+   
     loadn r3, #'\0'
-    loadn r7, #0 ; armazena a atual rodada
+    loadn r7, #colours_sequence
 
     main_loop:
-        loadi r4, r1
+
+        loadn r1, #colours_sequence
+        
+        loadi r4, r7
         cmp r4, r3 
         jeq fim
-        call acendeCorAtual
-        call Delay
-        call apagaCorAtual
-        inc r1
+        loop2:
+            cmp r1, r7
+            call acendeCorAtual
+            call Delay
+            call apagaCorAtual
+            jeq reset
+            inc r1
+        jmp loop2
+        
+        reset:
+            loadn r1, #colours_sequence
+        loop3:
+            call acendeLetraDigitada
+            loadn r5, #Letra
+            loadi r0, r5
+            cmp r0, r1
+
+            call Delay
+            call apagaLetraDigitada
+
+            inc r1
+            jeq loop3
+            jmp fim
+
+
+            inc r7
+
         jmp main_loop
-
-
 
     fim:
         halt
@@ -737,6 +762,47 @@ acendeLetraDigitada:
         rts
 
 
+apagaLetraDigitada:
+    push fr		; Protege o registrador de flags
+	push r0
+	push r1
+	push r2
+    push r5
+    push r4
+
+    loadn r5, #Letra
+    loadi r4, r5
+
+    loadn r6, #'q' ; Verde
+    cmp r4, r6
+    ceq apagaVerde
+    jeq apagaLetraDigitadaFim
+
+    loadn r6, #'w' ; Vermelho
+    cmp r4, r6
+    ceq apagaVermelho
+    jeq apagaLetraDigitadaFim
+
+    loadn r6, #'a' ; Amarelo    
+    cmp r4, r6
+    ceq apagaAmarelo
+    jeq apagaLetraDigitadaFim
+
+    loadn r6, #'s' ; Azul
+    cmp r4, r6
+    ceq apagaAzul
+    jeq apagaLetraDigitadaFim
+    
+    apagaLetraDigitadaFim:
+        pop r4
+        pop r5
+        pop r2
+        pop r1
+        pop r0
+        pop fr
+        rts
+
+
 acendeCorAtual:
     push fr		; Protege o registrador de flags
 	push r0
@@ -826,10 +892,10 @@ Delay:
 	push r0
 	push r1
 	
-	loadn r1, #400  ; a
+	loadn r1, #500  ; a
   
    Delay_volta2:				;Quebrou o contador acima em duas partes (dois loops de decremento)
-	loadn r0, #24000	; b
+	loadn r0, #30000	; b
 
    Delay_volta: 
 	dec r0					; (4*a + 6)b = 1000000  == 1 seg  em um clock de 1MHz
