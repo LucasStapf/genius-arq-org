@@ -16,7 +16,7 @@ all: main.o $(OBJS)
 main.o: main.c $(wildcard *.h)
 	$(COMPILER) -c $< $(COMP_FLAGS) $(NAME_FLAG) $@
 
-clear:
+clean:
 	rm *.o
 #	rm $(NAME)
 
