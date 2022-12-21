@@ -294,55 +294,80 @@ static tab_azul_linha5 + #9, #'\0'
 
 Letra: var #1
 
-
-; r0: 
+; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Rotinas principal do jogo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+; r0: registrador auxiliar para comparacoes
 ; r1: sequecia de cores a ser percorrida a cada iteracao
-; r2:
+; r2: registrador auxiliar para comparacoes
 ; r3: delimitador das strings
 ; r4: registrador auxiliar para comparacoes
 ; r5: letra do teclado
 ; r6:
-; r7: atual rodada
+; r7: atual rodada (registrador que aponta para a ultima cor da rodada atual)
+
 main:
    
-    loadn r3, #'\0'
-    loadn r7, #colours_sequence
+    loadn r3, #'\0'                         ; Carrega o r3 com a ultima posicao da sequencia de cores
+    loadn r7, #colours_sequence             ; Carrega o r7 com a primeira posicao da sequencia de cores
 
     main_loop:
 
-        loadn r1, #colours_sequence
+        call Delay
+
+        loadn r1, #colours_sequence         ; Carrega o r1 com a primeira posicao da sequencia de cores
         
-        loadi r4, r7
-        cmp r4, r3 
-        jeq fim
-        loop2:
-            cmp r1, r7
-            call acendeCorAtual
+         
+        loadi r4, r7                        ; Compara os conteudos de r7 com r3. Se r7 == r3, fim do jogo
+        cmp r4, r3                          
+        jeq fim                         
+        
+        
+        loop2:                              ; Loop referente a sequencia de cores a ser impressa pelo computador
+
+            cmp r1, r7                      ; Verifica se todas as cores da rodada foram impressas
+            
+            call acendeCorAtual             ; Rotinas para acender e apagar a cor atual 
             call Delay
             call apagaCorAtual
-            jeq reset
-            inc r1
-        jmp loop2
-        
-        reset:
-            loadn r1, #colours_sequence
-        loop3:
-            call acendeLetraDigitada
-            loadn r5, #Letra
-            loadi r0, r5
-            cmp r0, r1
 
+            jeq reset                       ; Se todas as cores forem impressas, direciona-se para a vez do usuario digitar (loop3)
+            inc r1                          ; Passa para a proxima cor a ser impressa 
+
+            jmp loop2
+
+
+        reset:                              ; Preparacao para vez do usuario digitar. Aponta r1 para o inicio da sequencia de cores
+            loadn r1, #colours_sequence
+
+
+        loop3:                              ; Loop referente a sequencia de cores a ser digitada pelo usuario
+
+            call acendeLetraDigitada        ; Rotinas para acender e apagar a ultima cor digitada pelo usuario
             call Delay
             call apagaLetraDigitada
+ 
+            loadn r5, #Letra                ; Compara se a letra digitada eh a mesma armazenada no endereco de r1
+            loadi r0, r5
+            loadi r2, r1
+            cmp r0, r2
+            jne fim
 
+;       + - - - Usuario ja acertou a letra da rodada
+;       |
+;       |
+;       V
+
+            cmp r1, r7    ; Verifica se eh a ultima letra da rodada
+            jeq loop4
+           
             inc r1
-            jeq loop3
-            jmp fim
-
-
-            inc r7
-
-        jmp main_loop
+            jmp loop3          
+        
+            loop4:
+                inc r7
+                jeq main_loop  
+ 
 
     fim:
         halt
