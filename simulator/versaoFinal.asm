@@ -1,5 +1,7 @@
-jmp main 
-
+jmp menu 
+; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Definicoes iniciais %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 colours_sequence: var #50
 static colours_sequence +  #0, #'s' ; Azul
 static colours_sequence +  #1, #'a' ; Amarelo
@@ -295,6 +297,73 @@ static tab_azul_linha5 + #9, #'\0'
 Letra: var #1
 
 ; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Menu do jogo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Genius: string "G E N I U S"
+Instrucoes: string "Teclas e cores:"
+TeclaVerde: string "Tecla 'q': Verde"
+TeclaVermelho: string "Tecla 'w': Vermelho"
+TeclaAmarelo: string "Tecla 'a': Amarelo"
+TeclaAzul: string "Tecla 's': Azul"
+startGame: string "O jogo ja vai comecar..."
+msgFim: string "G A M E - O V E R"
+
+menu:
+
+    loadn r0, #95
+    loadn r1, #Genius
+    call Imprimestr
+
+    loadn r3, #158
+    loadn r1, #Instrucoes
+    add r0, r3, r0
+    call Imprimestr
+
+    loadn r3, #80
+    loadn r1, #TeclaVerde
+    loadn r2, #512
+    add r0, r3, r0
+    call Imprimestr
+
+    loadn r3, #79
+    loadn r1, #TeclaVermelho
+    loadn r2, #2304
+    add r0, r3, r0
+    call Imprimestr
+
+    loadn r3, #80
+    loadn r1, #TeclaAmarelo
+    loadn r2, #2816
+    add r0, r3, r0 
+    call Imprimestr
+
+    loadn r3, #82
+    loadn r1, #TeclaAzul
+    loadn r2, #3072
+    add r0, r3, r0
+    call Imprimestr
+
+    loadn r3, #156
+    loadn r1, #startGame
+    loadn r2, #0
+    add r0, r3, r0
+    call Imprimestr
+
+    call Delay
+    call Delay 
+    call Delay
+    call Delay
+    call Delay
+    call Delay 
+    call Delay
+    call Delay
+    
+    call ApagaTela
+
+    jmp main
+
+; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Rotinas principal do jogo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ; r0: registrador auxiliar para comparacoes
@@ -355,7 +424,7 @@ main:
             cmp r0, r2                      ; Verifica se o usuario acertou a cor. Se nao, jmp fim
             jne fim
 
-;       + - -  A partir daqui, o usuario ja acertou a letra da rodada
+;       + - -  A partir daqui, o usuario acertou a letra da rodada
 ;       |
 ;       V
 
@@ -371,6 +440,12 @@ main:
  
 
     fim:
+        call ApagaTela
+        loadn r0, #90
+        loadn r2, #2304
+        loadn r1, #msgFim
+        call Imprimestr
+
         halt
 
 
@@ -714,7 +789,7 @@ ImprimestrSai:
 
 
 ; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Rotina para digitar 1 digito %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Rotina para dar 1 digito  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 digLetra:	; Espera que uma tecla seja digitada e salva na variavel global "Letra"
 	push fr		; Protege o registrador de flags
@@ -918,10 +993,10 @@ Delay:
 	push r0
 	push r1
 	
-	loadn r1, #500  ; a
+	loadn r1, #400  ; a
   
    Delay_volta2:				;Quebrou o contador acima em duas partes (dois loops de decremento)
-	loadn r0, #30000	; b
+	loadn r0, #24000	; b
 
    Delay_volta: 
 	dec r0					; (4*a + 6)b = 1000000  == 1 seg  em um clock de 1MHz
@@ -932,4 +1007,24 @@ Delay:
 	pop r1
 	pop r0
 	
+	rts
+
+
+;********************************************************
+;                       APAGA TELA
+;********************************************************
+ApagaTela:
+	push r0
+	push r1
+	
+	loadn r0, #1200		; apaga as 1200 posicoes da Tela
+	loadn r1, #' '		; com "espaco"
+	
+	   ApagaTela_Loop:	;label for(r0=1200;r3>0;r3--)
+		dec r0
+		outchar r1, r0
+		jnz ApagaTela_Loop
+ 
+	pop r1
+	pop r0
 	rts
