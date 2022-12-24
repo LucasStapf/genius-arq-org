@@ -510,8 +510,9 @@ void Model::processador() {
 
             if (diff >= mem[END_TIMER]) {
                 mem[END_TIMER] = 0;
-                mem[END_SYSTEM_CALL] = 1;
-                setBit(END_INTERRUPTIONS, INT_TIMER);
+//                mem[END_SYSTEM_CALL] = 1;
+//                setBit(END_INTERRUPTIONS, INT_TIMER);
+                disparaInterrupcao(INT_TIMER);
             } else {
                 mem[END_TIMER] -= diff;
             }
@@ -1027,6 +1028,7 @@ bool Model::getBit(int address, int bit) {
 }
 
 void Model::disparaInterrupcao(int interrupcao) {
-    
+    mem[END_SYSTEM_CALL] = 1;
+    setBit(END_INTERRUPTIONS, interrupcao);
 }
 

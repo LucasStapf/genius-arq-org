@@ -129,7 +129,7 @@ bool Controller::userInput(const char *tecla)
 	
 	key = tecla[0];
 	//return FALSE;
-	
+	model->disparaInterrupcao(INT_KB);
 	return FALSE; // TRUE para impedir que o evento continue para os filhos, FALSE para permitir
 }
 

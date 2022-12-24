@@ -748,7 +748,6 @@ gboolean View::teclado(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	{
 		tecla[0] = ((char*)&keyval)[0];
 		tecla[1] = 0;
-        model->disparaInterrupcao(INT_KB);
 	} 
 
 	//cout << tecla << endl;	
