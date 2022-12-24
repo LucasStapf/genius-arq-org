@@ -34,129 +34,107 @@
 
 
 ; ************************************************ ;
-;				VARIÁVEIS GLOBAIS
-; ************************************************ ;
-POS_BIRD:		VAR #1
-OLD_POS_BIRD:	VAR #1
-
-; ************************************************ ;
-;				IMAGENS DOS OBJETOS
-; ************************************************ ;
-BIRD:		VAR #4
-STATIC 			BIRD + #0, #128
-STATIC			BIRD + #1, #129
-STATIC			BIRD + #2, #130
-STATIC			BIRD + #3, #131
-
-CANO_BASE:	VAR #2
-STATIC			CANO_BASE + #0, #132
-STATIC			CANO_BASE + #1, #133	
-STATIC			CANO_BASE + #2, #134
-
-CANO_TUBO: VAR #2
-STATIC			CANO_TUBO + #0, #135
-STATIC			CANO_TUBO + #1, #136
-
-
-; ************************************************ ;
 ;					  TEXTOS
 ; ************************************************ ;
-mensagem2 : string "Ola Mundo!"
-
-
+msg_inicial : 	string 		"Ola Mundo!"
+msg_timer:		string		"Timer funcionando!"
+msg_timer_2:	string		"Timer2 funcionando!"
+text:			var			#5
+static			text + #0,	#'1'
+static			text + #1,	#'2'
+static			text + #2,	#'3'
+static			text + #3,	#'4'
+static			text + #4,	#'\0'
 
 ; ************************************************ ;
-;				  PROGRAMA PRINCIPAL
+;	INTERRUPCAO DO TIMER 1
+; ************************************************ ;
+INT_TIMER:
+		STOREN 	30681, #0				; Desabilita interrupções.
+
+		PUSH	R0
+		PUSH	R1
+		PUSH	R2
+		
+		LOADN	R0, #100
+		LOADN	R1, #msg_timer
+		LOADN	R2, #1792
+		CALL	Imprimestr
+		
+		STOREN	32760, #INT_TIMER_2		; Endereço da interrupção do timer.
+		STOREN	32748, #10				; Valor do timer. (segundos)
+		
+		POP		R2
+		POP		R1
+		POP		R0
+		
+		STOREN 	30681, #1				; Desabilita interrupções.
+		RTI
+	
+; ************************************************ ;
+;	INTERRUPCAO DO TIMER 2
+; ************************************************ ;
+INT_TIMER_2:
+		STOREN 	30681, #0				; Desabilita interrupções.
+
+		PUSH	R0
+		PUSH	R1
+		PUSH	R2
+		
+		LOADN	R0, #300
+		LOADN	R1, #msg_timer_2
+		LOADN	R2, #1792
+		CALL	Imprimestr
+		
+		POP		R2
+		POP		R1
+		POP		R0
+		
+		STOREN 	30681, #1				; Desabilita interrupções.
+		RTI
+		
+; ************************************************ ;
+;	INTERRUPCAO DO TECLADO
+; ************************************************ ;
+INT_KB:
+		STOREN 	30681, #0				; Desabilita interrupções.
+
+		PUSH	R0
+		PUSH	R1
+		
+		INCHAR	R0
+		LOADN	R1, #620
+		OUTCHAR	R0, R1
+		
+		POP		R1
+		POP		R0
+		
+		STOREN	30681, #1				; Habilita interrupções.
+		RTI
+		
+
+; ************************************************ ;
+;	PROGRAMA PRINCIPAL
 ; ************************************************ ;
 
 MAIN:
-
-	LOADN	R0, #0
-	STORE	OLD_POS_BIRD, R0
-	STORE	POS_BIRD, R0
-	
-	HALT
+		STOREN	30681, #1				; Habilita interrupções.
+		STOREN	30682, #192				; Habilita interrupção do timer e interrupção do teclado. # 00000000 11000000.
+		STOREN	32760, #INT_TIMER		; Endereço da interrupção do timer.
+		STOREN	32748, #10				; Valor do timer. (segundos)
+		STOREN	32761, #INT_KB			; Endereço da interrupção do KB.
+		
+		LOADN	R0, #50
+		LOADN	R1, #msg_inicial
+		LOADN	R2, #2304
+		CALL	Imprimestr
+		
+LOOP:	JMP	LOOP	
+		
+		HALT
 
 ; *************FIM PROGRAMA PRINCIPAL************* ;
 
-
-
-
-; *************PRINT_2x2************* ;
-; Imprime uma imagem 2x2 (2 caractes por 2 caracteres)
-; R0: Posição inicial
-; R1: Primeiro caracter da imagem
-; R2: Cor da imagem
-PRINT_2x2:
-
-	PUSH 	R0				; Posição.
-	PUSH	R1				; Primeiro bloco da imagem.
-	PUSH	R2				; Cor do objeto.
-	PUSH	R3				; Numero de blocos.
-	PUSH 	R4				; Caracter.
-	PUSH	R5				; 0
-	PUSH 	R6				; 2
-	PUSH 	R7				; Quebra de linha
-	
-	LOADN	R3, #4
-	LOADN	R7, #38
-	LOADN	R5, #0
-	LOADN	R6, #2
-
-LOOP_PRINT_2:
-
-	CMP		R3, R5
-	JEQ		END_PRINT_2		; Verifica se 4 blocos ja foram printados.
-	LOADI	R4, R1
-	ADD		R4, R4, R2
-	OUTCHAR R4, R0
-
-	INC		R1
-	INC 	R0
-	DEC		R3
-	
-	CMP		R3, R6
-	JNE		LOOP_PRINT_2
-	ADD		R0, R0, R7
-	JMP		LOOP_PRINT_2
-
-END_PRINT_2:
-
-	POP 	R7
-	POP		R6
-	POP		R5
-	POP		R4
-	POP		R3
-	POP		R2
-	POP		R1
-	POP		R0
-
-	RTS
-	
-; ************* BIRD_CONTROLLER ************* ;
-BIRD_CONTROLLER:
-	PUSH	R4
-	PUSH 	R5
-	INCHAR 	R4
-	LOADN	R5, #'W'
-	CMP 	R5, R4
-	CEQ		BIRD_FLY
-	POP		R5
-	POP		R4
-	RTS
-
-; ************ BIRD_FLY *********** ;
-BIRD_FLY:
-	PUSH	R0
-	PUSH	R1
-	PUSH	R2
-	LOAD	R0, POS_BIRD
-	STORE	OLD_POS_BIRD, R0
-	; TERMINAR
-	POP		R2
-	POP		R1
-	POP		R0
-	RTS
 
 ;---- Inicio das Subrotinas -----
 	

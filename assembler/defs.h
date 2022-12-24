@@ -391,11 +391,11 @@
 /* Inicio do espaco de dados dinamicos */
 #define END_DYN_DATA_START              24577
 /* Final do espaco de dados dinamicos */
-#define END_DYN_DATA_END                30681
+#define END_DYN_DATA_END                30679
 /* Final do especo para programas e dados */
-#define END_PROGRAM_DATA_END            30681
+#define END_PROGRAM_DATA_END            30679
 /* Se escrever neste endereco entao causa interrupcao de sistema */
-#define END_SYSTEM_CALL                 30682
+#define END_SYSTEM_CALL                 30680
 /* Pilha (folga de 8 palavras) */
 #define END_STACK_END                   30690
 #define END_STACK_START                 32738

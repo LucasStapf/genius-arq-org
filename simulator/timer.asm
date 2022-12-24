@@ -89,30 +89,14 @@ INT_TIMER_2:
 		
 		RTI
 		
-; ************************************************ ;
-;	INTERRUPCAO DO TECLADO
-; ************************************************ ;
-INT_KB:
-		PUSH	R0
-		PUSH	R1
-		
-		INCHAR	R0
-		LOADN	R1, #300
-		OUTCHAR	R0, R1
-		
-		POP		R1
-		POP		R0
-		
-		RTI
-		
 
 ; ************************************************ ;
 ;	PROGRAMA PRINCIPAL
 ; ************************************************ ;
-
 MAIN:
-		STOREN	30682, #192				; Habilita interrupções e a interrupção do timer. # 00000000 11000000
-		STOREN	32760, #INT_TIMER			; Endereço da interrupção do timer.
+		STOREN	30681, #1				; Habilita interrupções
+		STOREN	30682, #128				; Habilita interrupção do timer. # 00000000 10000000
+		STOREN	32760, #INT_TIMER		; Endereço da interrupção do timer.
 		STOREN	32748, #10				; Valor do timer. (segundos)
 		
 		LOADN	R0, #50
@@ -120,7 +104,7 @@ MAIN:
 		LOADN	R2, #2304
 		CALL	Imprimestr
 		
-LOOP:		JMP	LOOP	
+LOOP:	JMP	LOOP	
 		
 		HALT
 

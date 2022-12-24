@@ -37,15 +37,6 @@
 ;					  TEXTOS
 ; ************************************************ ;
 msg_inicial : 	string 		"Ola Mundo!"
-msg_timer:		string		"Timer funcionando!"
-msg_timer_2:	string		"Timer2 funcionando!"
-text:			var			#5
-static			text + #0,	#'1'
-static			text + #1,	#'2'
-static			text + #2,	#'3'
-static			text + #3,	#'4'
-static			text + #4,	#'\0'
-
 
 		
 ; ************************************************ ;
@@ -70,7 +61,8 @@ INT_KB:
 ; ************************************************ ;
 
 MAIN:
-		STOREN	30682, #160				; Habilita interrupções e a interrupção do teclado. # 00000000 11000000
+		STOREN	30681, #1				; Habilita interrupções
+		STOREN	30682, #64				; Habilita interrupção do teclado. # 00000000 01000000
 		STOREN	32761, #INT_KB			; Endereço da interrupção do kb.
 		
 		LOADN	R0, #50

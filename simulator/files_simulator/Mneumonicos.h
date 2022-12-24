@@ -6,8 +6,9 @@
 /*
 [00000 - 16384] : Programa e variaveis (16kw 32kb)
 [16385 - 24576] : Dados estaticos (8kw 16kb)
-[24577 - 30680] : Dados dinamicos (6kw 12kb)
-[30681]         : System call
+[24577 - 30679] : Dados dinamicos (6kw 12kb)
+[30680]         : System call
+[30681]         : Enable Interruptions
 [30682]         : Flags e chaves de Interrupções
 [30683 - 30689] : Folga
 [30690 - 32738] : Stack (2kw 4kb)
@@ -24,7 +25,8 @@
 
 /* --- Endereços na Memoria --- */
 
-#define END_SYSTEM_CALL 30681
+#define END_SYSTEM_CALL         30680
+#define END_ENB_INTERRUPTIONS   30681
 
 /**
  * Endereço onde serão registradas as interrupões no sistema e se serão habilitadas ou não.
@@ -33,22 +35,21 @@
  * Os 8 bits mais significativos representam as flags de interrupção, ou seja,
  * quando ocorrer uma interrupção do tipo X, a flag X irá subir (ir para nível 1).
  * Bits:
- * 14: INT_TIMER     (Interrupção do timer)
- * 13: INT_KB        (Interrupção do teclado)
+ * 15: INT_TIMER     (Interrupção do timer)
+ * 14: INT_KB        (Interrupção do teclado)
  * ...
- * 7: END_INTERRUPTIONS (Habilita interrupções)
- * 6: ENB_TIMER         (Habilita timer)
- * 5: ENG_KB            (Habilita keyboard)
+ * 7: ENB_TIMER         (Habilita timer)
+ * 6: ENG_KB            (Habilita keyboard)
  * ...
  */
 #define END_INTERRUPTIONS   30682
 
-#define INT_TIMER           14
-#define INT_KB              13
+#define INT_TIMER           15
+#define INT_KB              14
 
-#define ENB_INTERRUPTIONS   7
-#define ENB_TIMER           6
-#define ENB_KB              5
+//#define ENB_INTERRUPTIONS   7
+#define ENB_TIMER           7
+#define ENB_KB              6
 
 #define END_STACK_BEGIN     32738
 #define END_TIMER           32748

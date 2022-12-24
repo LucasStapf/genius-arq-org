@@ -870,7 +870,7 @@ void Model::processador() {
 
     // Gerenciador de Interrupções
     // Verifica se as interrupções estão habilitadas e depois verifica se alguma interrupção foi disparada.
-    if (getBit(END_INTERRUPTIONS, ENB_INTERRUPTIONS) && mem[END_SYSTEM_CALL] != 0) {
+    if (mem[END_ENB_INTERRUPTIONS] && mem[END_SYSTEM_CALL]) {
 
         int count = 0;
         int isr, bit;
@@ -906,15 +906,6 @@ void Model::processador() {
             pc = mem[isr];
         }
     }
-
-    // Verifica se há interrupções
-//    if (FR[F_INT_TIMER]) {
-//        FR[F_INT_TIMER] = false;
-//        mem[sp] = pc;
-//        sp--;
-//        pc = mem[END_INT_TIMER];
-//        countingTime = false;
-//    }
 
 	auxpc = pc;
 
@@ -1028,7 +1019,9 @@ bool Model::getBit(int address, int bit) {
 }
 
 void Model::disparaInterrupcao(int interrupcao) {
-    mem[END_SYSTEM_CALL] = 1;
-    setBit(END_INTERRUPTIONS, interrupcao);
+    if (mem[END_ENB_INTERRUPTIONS] && getBit(END_INTERRUPTIONS, interrupcao - 8)) {
+        mem[END_SYSTEM_CALL] = 1;
+        setBit(END_INTERRUPTIONS, interrupcao);
+    }
 }
 
