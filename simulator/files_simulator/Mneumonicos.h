@@ -33,18 +33,27 @@
  * Os 8 bits mais significativos representam as flags de interrupção, ou seja,
  * quando ocorrer uma interrupção do tipo X, a flag X irá subir (ir para nível 1).
  * Bits:
- * 15: INT_TIMER (Interrupção do timer)
+ * 14: INT_TIMER     (Interrupção do timer)
+ * 13: INT_KB        (Interrupção do teclado)
  * ...
- * 7: ENB_TIMER (Ativar timer)
+ * 7: END_INTERRUPTIONS (Habilita interrupções)
+ * 6: ENB_TIMER         (Habilita timer)
+ * 5: ENG_KB            (Habilita keyboard)
  * ...
  */
 #define END_INTERRUPTIONS   30682
-#define INT_TIMER           15
-#define ENB_TIMER           7
+
+#define INT_TIMER           14
+#define INT_KB              13
+
+#define ENB_INTERRUPTIONS   7
+#define ENB_TIMER           6
+#define ENB_KB              5
 
 #define END_STACK_BEGIN     32738
 #define END_TIMER           32748
 #define END_INT_TIMER       32760
+#define END_INT_KB          32761
 
 /* --------------------------- */
 

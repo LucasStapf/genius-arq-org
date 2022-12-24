@@ -1,4 +1,25 @@
-/snap/clion/218/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/snap/clion/218/bin/ninja/linux/ninja -G Ninja -S /home/lucas/workspace/projeto-orgarq/simulator/files_simulator -B /home/lucas/workspace/projeto-orgarq/simulator/files_simulator/cmake-build-debug
--- Configuring done
--- Generating done
--- Build files have been written to: /home/lucas/workspace/projeto-orgarq/simulator/files_simulator/cmake-build-debug
+/home/lucas/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/223.8214.51/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /home/lucas/Workspace/genius-arq-org/simulator/files_simulator -B /home/lucas/Workspace/genius-arq-org/simulator/files_simulator/cmake-build-debug
+-- The C compiler identification is GNU 11.3.0
+-- The CXX compiler identification is GNU 11.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found PkgConfig: /usr/bin/pkg-config (found version "0.29.2") 
+-- Checking for module 'gtk+-2.0'
+--   No package 'gtk+-2.0' found
+CMake Error at /home/lucas/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/223.8214.51/bin/cmake/linux/share/cmake-3.24/Modules/FindPkgConfig.cmake:607 (message):
+  A required package was not found
+Call Stack (most recent call first):
+  /home/lucas/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/223.8214.51/bin/cmake/linux/share/cmake-3.24/Modules/FindPkgConfig.cmake:829 (_pkg_check_modules_internal)
+  CMakeLists.txt:7 (pkg_check_modules)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/lucas/Workspace/genius-arq-org/simulator/files_simulator/cmake-build-debug/CMakeFiles/CMakeOutput.log".

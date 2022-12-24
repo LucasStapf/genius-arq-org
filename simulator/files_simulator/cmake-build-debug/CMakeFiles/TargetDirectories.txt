@@ -1,3 +1,0 @@
-/home/lucas/workspace/projeto-orgarq/simulator/files_simulator/cmake-build-debug/CMakeFiles/sim.dir
-/home/lucas/workspace/projeto-orgarq/simulator/files_simulator/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/lucas/workspace/projeto-orgarq/simulator/files_simulator/cmake-build-debug/CMakeFiles/rebuild_cache.dir

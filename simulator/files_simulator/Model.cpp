@@ -867,17 +867,42 @@ void Model::processador() {
 				break;
     }
 
-    // Verificar se há interrupções no sistema.
-    if (mem[END_SYSTEM_CALL] != 0) {
-        mem[END_SYSTEM_CALL] = 0;
-        // Verifica qual interrupção ocorreu. Ordem de prioridade: Bit 15 -> 8
-        if (getBit(mem[END_INTERRUPTIONS], INT_TIMER)
-            && getBit(mem[END_INTERRUPTIONS], ENB_TIMER)) { // Seguindo ordem de prioriodade 15 -> 8
-			clearBit(END_INTERRUPTIONS, INT_TIMER);
+    // Gerenciador de Interrupções
+    // Verifica se as interrupções estão habilitadas e depois verifica se alguma interrupção foi disparada.
+    if (getBit(END_INTERRUPTIONS, ENB_INTERRUPTIONS) && mem[END_SYSTEM_CALL] != 0) {
+
+        int count = 0;
+        int isr, bit;
+
+        // Verifica qual interrupção ocorreu. Ordem de prioridade: Bit 14 -> 8
+        if (getBit(END_INTERRUPTIONS, INT_TIMER) && getBit(END_INTERRUPTIONS, ENB_TIMER)) {
+            if (!count) {
+                bit = INT_TIMER;
+                isr = END_INT_TIMER;
+                countingTime = false;
+            }
+            count++;
+//			clearBit(END_INTERRUPTIONS, INT_TIMER);
+//            mem[sp] = pc;
+//            sp--;
+//            pc = mem[END_INT_TIMER];
+        }
+
+        if (getBit(END_INTERRUPTIONS, INT_KB) && getBit(END_INTERRUPTIONS, ENB_KB)) {
+            if (!count) {
+                bit = INT_KB;
+                isr = END_INT_KB;
+            }
+            count++;
+        }
+
+        if (count) {
+            if (count == 1)
+                mem[END_SYSTEM_CALL] = 0;
+            clearBit(END_INTERRUPTIONS, bit);
             mem[sp] = pc;
             sp--;
-            pc = mem[END_INT_TIMER];
-            countingTime = false;
+            pc = mem[isr];
         }
     }
 
@@ -999,5 +1024,9 @@ bool Model::getBit(int address, int bit) {
         return -1;
 
     return (mem[address] & (1 << bit)) != 0 ? true : false;
+}
+
+void Model::disparaInterrupcao(int interrupcao) {
+    
 }
 

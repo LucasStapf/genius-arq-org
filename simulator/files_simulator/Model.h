@@ -168,6 +168,9 @@ class Model : public ModelInterface
 		int getDelay();
 
 		void setDelay(int valor);
+
+        // ----- Interrupcao ---------
+        void disparaInterrupcao(int interrupcao);
 };
 
 #endif

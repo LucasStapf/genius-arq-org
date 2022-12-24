@@ -69,6 +69,9 @@ class ModelInterface
 
 		virtual void setDelay(int valor) = 0;
 
+        // Interrupção
+        virtual void disparaInterrupcao(int interrupcao) = 0;
+
 };
 
 #endif
